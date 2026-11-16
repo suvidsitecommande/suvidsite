@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Découvrez les plats Suvid, prêts en seulement 10 minutes.">
+<title>Suvid — Prêt en 10 minutes</title>
+<style>
+:root {
+  --background:#f5f7f3;--surface:#fff;--surface-soft:#eef7f0;
+  --text:#152018;--gray:#69746c;--green:#218c4d;
+  --green-dark:#176d3a;--green-light:rgba(33,140,77,.12);
+  --yellow:#f2b84b;--red:#c84646;--border:#dce6de;
+  --shadow:0 16px 42px rgba(21,32,24,.09);--radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:var(--background);line-height:1.5}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+img{display:block;max-width:100%}
+.container{width:min(1180px,calc(100% - 32px));margin:0 auto}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.navigation{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand-logo{width:50px;height:50px;padding:5px;border-radius:15px;display:grid;place-items:center;overflow:hidden;background:white;border:1px solid var(--border);box-shadow:0 8px 20px rgba(21,32,24,.1)}
+.brand-logo img{width:40px;height:40px;object-fit:contain}
+.brand-name{font-size:1.25rem;font-weight:900;letter-spacing:.04em}
+.brand-description{color:var(--gray);font-size:.76rem}
+.navigation-links{display:flex;align-items:center;gap:18px}
+.navigation-link{color:var(--text);text-decoration:none;font-weight:bold}
+.navigation-link:hover{color:var(--green)}
+.cart-button{border:none;border-radius:999px;background:var(--text);color:white;padding:12px 17px;font-weight:bold;display:flex;align-items:center;gap:8px}
+.cart-button:hover{background:var(--green-dark)}
+.cart-count{min-width:24px;height:24px;padding:0 6px;border-radius:999px;display:grid;place-items:center;background:var(--yellow);color:var(--text);font-size:.8rem;font-weight:900}
+.hero{padding:75px 0 55px}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:42px;align-items:center}
+.small-title{display:inline-block;padding:8px 14px;border-radius:999px;background:var(--green-light);color:var(--green-dark);border:1px solid rgba(33,140,77,.2);font-weight:bold;font-size:.85rem;margin-bottom:18px}
+h1{font-size:clamp(2.8rem,6vw,5.3rem);line-height:1;letter-spacing:-.05em;margin:0 0 22px}
+h2{font-size:clamp(2rem,4vw,3.2rem);letter-spacing:-.04em;margin:0 0 8px}
+h3{margin-top:0}
+.hero-text{color:var(--gray);font-size:1.08rem;max-width:640px;margin-bottom:28px}
+.hero-buttons{display:flex;gap:14px;flex-wrap:wrap}
+.main-button,.second-button{border-radius:14px;padding:14px 20px;font-weight:bold;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.main-button{color:white;background:var(--green)}
+.main-button:hover{background:var(--green-dark)}
+.second-button{color:var(--text);border:1px solid var(--border);background:white}
+.second-button:hover{background:var(--surface-soft)}
+.hero-card{min-height:460px;border-radius:34px;background:radial-gradient(circle at top right,rgba(242,184,75,.32),transparent 42%),linear-gradient(145deg,var(--green),var(--green-dark));color:white;padding:34px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.hero-card-title{color:rgba(255,255,255,.82);font-weight:bold}
+.ten-minutes{color:white;font-size:clamp(6rem,14vw,10rem);line-height:.8;font-weight:900;letter-spacing:-.08em}
+.ten-minutes span{font-size:1.7rem;margin-left:12px;letter-spacing:0}
+.hero-steps{display:grid;gap:10px}
+.hero-step{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:13px 15px;font-weight:bold}
+section{padding:45px 0}
+.section-header{margin-bottom:28px}
+.section-header p{color:var(--gray);max-width:680px;margin:0}
+.video-container{display:grid;grid-template-columns:1fr 300px;align-items:center;gap:42px;background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:34px;box-shadow:var(--shadow)}
+.video-text p{color:var(--gray);max-width:640px;margin-bottom:0}
+.video-box{width:100%;max-width:300px;aspect-ratio:9/16;margin:0 auto;border-radius:24px;overflow:hidden;background:black;border:1px solid var(--border);box-shadow:var(--shadow)}
+.video-box video{width:100%;height:100%;display:block;object-fit:contain;background:black}
+.search-container{margin-bottom:18px}
+.search-input{width:100%;max-width:500px;border:1px solid var(--border);background:white;color:var(--text);border-radius:14px;padding:14px 16px;outline:none}
+.search-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(33,140,77,.12)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.filter-button{border:1px solid var(--border);background:white;color:var(--text);padding:10px 15px;border-radius:999px;font-weight:bold}
+.filter-button:hover{background:var(--surface-soft)}
+.filter-button.active{background:var(--green);color:white;border-color:var(--green)}
+.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.meal-card{background:white;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:0 10px 28px rgba(21,32,24,.06);display:flex;flex-direction:column}
+.meal-card:hover{border-color:rgba(33,140,77,.45)}
+.meal-image{width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--surface-soft)}
+.meal-image img{width:100%;height:100%;object-fit:cover}
+.photo-placeholder{width:100%;height:100%;min-height:210px;display:grid;place-items:center;align-content:center;gap:8px;color:var(--gray);background:radial-gradient(circle at top left,rgba(242,184,75,.24),transparent 48%),var(--surface-soft);text-align:center;padding:20px}
+.photo-placeholder span{font-size:3rem}
+.photo-placeholder small{font-weight:bold}
+.meal-content{padding:21px;display:flex;flex-direction:column;flex:1}
+.meal-header{display:flex;justify-content:space-between;gap:14px;align-items:start}
+.meal-name{font-size:1.2rem;margin-bottom:8px}
+.meal-price{color:var(--green-dark);white-space:nowrap;font-weight:900;font-size:.9rem;text-align:right}
+.meal-category{color:var(--gray);font-size:.9rem;margin:0 0 14px}
+.ingredients-box{border:1px solid var(--border);border-radius:12px;background:var(--surface-soft);margin-bottom:14px;overflow:hidden}
+.ingredients-box summary{cursor:pointer;padding:10px 12px;font-size:.85rem;font-weight:bold;color:var(--green-dark)}
+.ingredients-content{padding:0 12px 12px;color:var(--gray);font-size:.85rem}
+.ingredients-content p{margin:0}
+.ingredients-content ul{margin:0;padding-left:18px}
+.meal-content .field{margin-top:auto}
+.add-button{width:100%;border:none;border-radius:13px;background:var(--green);color:white;padding:12px;margin-top:14px;font-weight:900}
+.add-button:hover{background:var(--green-dark)}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.step-card{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:25px}
+.step-card p{color:var(--gray);margin-bottom:0}
+.step-number{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--green);color:white;font-weight:900;margin-bottom:18px}
+.order-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;align-items:start}
+.panel{background:white;border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.empty-cart{color:var(--gray);padding:18px 0}
+.cart-items{display:grid;gap:14px}
+.cart-item{display:grid;grid-template-columns:1fr auto;gap:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.cart-item-name{font-weight:bold;margin-bottom:4px}
+.cart-item-price{color:var(--gray);font-size:.9rem}
+.quantity-control{display:flex;align-items:center;gap:8px;margin-top:9px}
+.quantity-control button{width:32px;height:32px;border:1px solid var(--border);border-radius:9px;background:white;color:var(--text);font-weight:bold}
+.remove-button{border:none;background:transparent;color:var(--red);padding:0;margin-top:8px;font-weight:bold;font-size:.82rem}
+.cart-summary{margin-top:18px;display:grid;gap:10px}
+.summary-line{display:flex;justify-content:space-between;gap:16px}
+.free-delivery{color:var(--green-dark)}
+.total-line{color:var(--green-dark);font-size:1.18rem;font-weight:900;border-top:1px solid var(--border);padding-top:13px;margin-top:5px}
+form{display:grid;gap:16px}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.field{display:grid;gap:7px}
+.full-field{grid-column:1/-1}
+label{font-size:.87rem;font-weight:bold}
+input,select,textarea{width:100%;border:1px solid var(--border);border-radius:13px;background:white;color:var(--text);padding:13px 14px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(33,140,77,.12)}
+input:disabled,select:disabled{background:#f1f3f1;color:#929a94;cursor:not-allowed}
+textarea{resize:vertical;min-height:105px}
+.city-notice{grid-column:1/-1;border-radius:13px;padding:13px 15px;font-size:.9rem;font-weight:bold}
+.city-notice.pending{color:#79500f;background:#fff5da;border:1px solid #ead194}
+.submit-button{border:none;border-radius:14px;background:var(--green);color:white;font-weight:900;padding:15px 18px;min-height:54px}
+.submit-button:hover{background:var(--green-dark)}
+.submit-button:disabled{opacity:.55;cursor:not-allowed}
+.form-note{color:var(--gray);font-size:.82rem;margin:0}
+.status{display:none;border-radius:13px;padding:13px 15px;font-weight:bold}
+.status.success{display:block;color:#155b33;background:#e4f5e9;border:1px solid #bfe5ca}
+.status.error{display:block;color:#8d2828;background:#fde7e7;border:1px solid #f2bcbc}
+footer{background:var(--text);color:white;padding:34px 0;margin-top:40px}
+.footer-content{display:flex;justify-content:space-between;gap:24px;align-items:center}
+.footer-text{color:rgba(255,255,255,.68);margin:0}
+.toast{position:fixed;right:22px;bottom:22px;z-index:100;background:var(--green);color:white;border-radius:14px;padding:13px 17px;box-shadow:var(--shadow);transform:translateY(120px);opacity:0;transition:.25s;pointer-events:none;font-weight:900}
+.toast.show{transform:translateY(0);opacity:1}
+@media(max-width:900px){
+ .hero-grid,.video-container,.order-layout{grid-template-columns:1fr}
+ .menu-grid{grid-template-columns:repeat(2,1fr)}
+ .hero-card{min-height:380px}
+}
+@media(max-width:650px){
+ .container{width:calc(100% - 22px)}
+ .navigation-link{display:none}
+ .hero{padding-top:45px}
+ .menu-grid,.steps-grid,.form-grid{grid-template-columns:1fr}
+ .full-field,.city-notice{grid-column:auto}
+ .footer-content{align-items:start;flex-direction:column}
+ .hero-card{min-height:330px}
+ h1{font-size:3rem}
+ .meal-header{flex-direction:column}
+ .meal-price{text-align:left}
+ .video-container{padding:24px 18px}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+ <div class="container navigation">
+  <a class="brand" href="#accueil">
+   <div class="brand-logo"><img src="logo-suvid.png" alt="Logo Suvid"></div>
+   <div><div class="brand-name">SUVID</div><div class="brand-description">Prêt en 10 minutes</div></div>
+  </a>
+  <div class="navigation-links">
+   <a class="navigation-link" href="#menu">Le menu</a>
+   <a class="navigation-link" href="#video">La vidéo</a>
+   <button class="cart-button" id="openCartButton" type="button">Panier <span class="cart-count" id="cartCount">0</span></button>
+  </div>
+ </div>
+</header>
+
+<main>
+<section class="hero" id="accueil">
+ <div class="container hero-grid">
+  <div>
+   <div class="small-title">🍽️ Simple, rapide et délicieux</div>
+   <h1>Un vrai repas prêt en seulement 10 minutes.</h1>
+   <p class="hero-text">Choisissez vos plats Suvid, placez le sachet fermé dans l’eau bouillante pendant 10 minutes, ouvrez et dégustez.</p>
+   <div class="hero-buttons">
+    <a class="main-button" href="#menu">Voir les plats</a>
+    <a class="second-button" href="#video">Voir la vidéo</a>
+   </div>
+  </div>
+  <div class="hero-card">
+   <div class="hero-card-title">DU FRIGO À L’ASSIETTE</div>
+   <div class="ten-minutes">10 <span>MINUTES</span></div>
+   <div class="hero-steps">
+    <div class="hero-step">1. Faites bouillir l’eau</div>
+    <div class="hero-step">2. Plongez le sachet fermé</div>
+    <div class="hero-step">3. Ouvrez, servez et dégustez</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="video">
+ <div class="container">
+  <div class="video-container">
+   <div class="video-text">
+    <div class="small-title">🎥 Découvrez Suvid</div>
+    <h2>Comment préparer votre plat ?</h2>
+    <p>Faites bouillir l’eau, placez le sachet fermé pendant 10 minutes, puis ouvrez et dégustez.</p>
+   </div>
+   <div class="video-box">
+    <video controls playsinline preload="metadata">
+     <source src="video-suvid.mp4" type="video/mp4">
+     Votre navigateur ne permet pas de lire cette vidéo.
+    </video>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="menu">
+ <div class="container">
+  <div class="section-header">
+   <h2>Le menu Suvid</h2>
+   <p>Choisissez votre plat, consultez les ingrédients, sélectionnez la portion puis ajoutez-le à votre panier.</p>
+  </div>
+  <div class="search-container"><input class="search-input" id="searchInput" type="search" placeholder="Rechercher un plat..."></div>
+  <div class="filters" id="filters"></div>
+  <div class="menu-grid" id="menuGrid"></div>
+ </div>
+</section>
+
+<section id="fonctionnement">
+ <div class="container">
+  <div class="section-header">
+   <h2>Comment ça marche ?</h2>
+   <p>Suvid simplifie vos repas tout en conservant le goût et la qualité des aliments.</p>
+  </div>
+  <div class="steps-grid">
+   <article class="step-card"><div class="step-number">1</div><h3>Choisissez</h3><p>Sélectionnez vos plats, vos portions et les quantités souhaitées.</p></article>
+   <article class="step-card"><div class="step-number">2</div><h3>Réchauffez</h3><p>Placez le sachet fermé dans l’eau bouillante pendant 10 minutes.</p></article>
+   <article class="step-card"><div class="step-number">3</div><h3>Dégustez</h3><p>Ouvrez le sachet, servez votre plat et profitez de votre repas.</p></article>
+  </div>
+ </div>
+</section>
+
+<section id="commande">
+ <div class="container">
+  <div class="section-header">
+   <h2>Finaliser la commande</h2>
+   <p>Remplissez vos informations pour confirmer votre commande Suvid.</p>
+  </div>
+  <div class="order-layout">
+   <aside class="panel">
+    <h3>Votre panier</h3>
+    <div id="cartContent"></div>
+    <div class="cart-summary">
+     <div class="summary-line"><span>Sous-total</span><strong id="subtotal">0 DOP</strong></div>
+     <div class="summary-line free-delivery"><span>Livraison</span><strong>Gratuite</strong></div>
+     <div class="summary-line total-line"><span>Total</span><span id="totalPrice">0 DOP</span></div>
+    </div>
+   </aside>
+
+   <div class="panel">
+    <h3>Vos informations</h3>
+    <form id="orderForm">
+     <div class="form-grid">
+      <div class="field"><label for="customerName">Nom complet *</label><input id="customerName" name="customerName" type="text" autocomplete="name" required></div>
+      <div class="field"><label for="phone">Téléphone / WhatsApp *</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+1 809 000 0000" required></div>
+      <div class="field">
+       <label for="city">Ville *</label>
+       <select id="city" name="city" required>
+        <option value="">Choisir une ville</option>
+        <option value="Las Terrenas">Las Terrenas</option>
+        <option value="Samaná">Samaná</option>
+        <option value="Las Galeras">Las Galeras</option>
+       </select>
+      </div>
+      <div class="field">
+       <label for="deliveryDay">Jour de livraison *</label>
+       <select id="deliveryDay" name="deliveryDay" required disabled><option value="">Choisissez d’abord une ville</option></select>
+      </div>
+      <div id="cityNotice" class="city-notice" hidden></div>
+      <div class="field">
+       <label for="payment">Moyen de paiement *</label>
+       <select id="payment" name="payment" required>
+        <option value="Espèces">Espèces</option><option value="Wise">Wise</option>
+       </select>
+      </div>
+      <div class="field"><label for="residence">Résidence *</label><input id="residence" name="residence" type="text" placeholder="Nom de la résidence" required></div>
+      <div class="field full-field"><label for="addressDetails">Informations complémentaires</label><input id="addressDetails" name="addressDetails" type="text" placeholder="Appartement, bâtiment, étage ou point de repère"></div>
+      <div class="field full-field"><label for="referredBy">Référé par</label><input id="referredBy" name="referredBy" type="text" placeholder="Nom de la personne qui vous a recommandé Suvid"></div>
+      <div class="field full-field"><label for="notes">Commentaire</label><textarea id="notes" name="notes" placeholder="Allergies, instructions ou informations importantes..."></textarea></div>
+     </div>
+     <div id="formStatus" class="status" aria-live="polite"></div>
+     <button class="submit-button" id="submitButton" type="submit">Confirmer ma commande</button>
+     <p class="form-note">Les commandes sont actuellement disponibles à Las Terrenas les mardis et samedis.</p>
+    </form>
+   </div>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div class="container footer-content">
+  <div><div class="brand-name">SUVID</div><p class="footer-text">Des plats savoureux, prêts en 10 minutes.</p></div>
+  <p class="footer-text">© <span id="year"></span> Suvid</p>
+ </div>
+</footer>
+<div class="toast" id="toast" aria-live="polite">Produit ajouté au panier</div>
+
+<script>
+const CONFIG = {
+ currency:"DOP",
+ deliveryFee:0,
+ orderEndpoint:"https://suvid-commandes.smoky1601.workers.dev",
+ demoMode:false
+};
+
+const products = [
+ {id:1,name:"Bœuf thaï",category:"Bœuf",image:"",ingredients:[],options:[{label:"1 portion",price:545},{label:"2 portions",price:1040}]},
+ {id:2,name:"Bœuf au vin rouge",category:"Bœuf",image:"",ingredients:[],options:[{label:"1 portion",price:545},{label:"2 portions",price:1040}]},
+ {id:3,name:"Bœuf cubain",category:"Bœuf",image:"",ingredients:["Bœuf","Oignons","Poivrons","Tomates","Épices","Jus de citron","Bouillon de bœuf","Câpres","Vinaigre","Sel","Poivre"],options:[{label:"1 portion",price:545},{label:"2 portions",price:1040}]},
+ {id:4,name:"Bœuf Madras",category:"Bœuf",image:"",ingredients:[],options:[{label:"1 portion",price:545},{label:"2 portions",price:1040}]},
+ {id:5,name:"Boulettes de bœuf à l’italienne",category:"Bœuf",image:"",ingredients:["Bœuf","Œuf","Chapelure","Vinaigre balsamique","Oignon haché","Ail","Épices","Sel","Poivre","Purée de tomates","Huile de truffe","Vin rouge","Coriandre","Basilic","Cassonade","Oignon rouge"],options:[{label:"1 portion",price:440},{label:"2 portions",price:820}]},
+
+ {id:6,name:"Poulet thaï",category:"Poulet en sauce",image:"",ingredients:[],options:[{label:"1 portion",price:425},{label:"2 portions",price:790}]},
+ {id:7,name:"Poulet au beurre",category:"Poulet en sauce",image:"",ingredients:["Poulet","Oignons jaunes","Lait de coco","Crème","Beurre","Pâte de tomate","Sauce tomate","Ail","Curry","Cannelle","Cardamome","Cumin","Miel","Sel","Poivre"],options:[{label:"1 portion",price:425},{label:"2 portions",price:790}]},
+ {id:8,name:"Poulet aux arachides",category:"Poulet en sauce",image:"",ingredients:["Poulet","Beurre d’arachide croquant","Lait de coco","Crème","Sauce soja","Miel","Sauce sweet chili","Gingembre","Ail","Huile de sésame","Bouillon de poulet"],options:[{label:"1 portion",price:425},{label:"2 portions",price:790}]},
+ {id:9,name:"Poulet à la coriandre",category:"Poulet en sauce",image:"",ingredients:[],options:[{label:"1 portion",price:425},{label:"2 portions",price:790}]},
+ {id:10,name:"Poulet à l’ananas",category:"Poulet en sauce",image:"",ingredients:["Poulet","Poivrons","Oignon rouge","Ananas","Coriandre","Oignons verts","Sauce sweet chili","Miel","Sauce soja","Huile de sésame","Zeste de lime","Jus de lime"],options:[{label:"1 portion",price:425},{label:"2 portions",price:790}]},
+ {id:11,name:"Boulettes de poulet, sauce Alfredo",category:"Poulet en sauce",image:"",ingredients:[],options:[{label:"1 portion",price:425},{label:"2 portions",price:790}]},
+ {id:12,name:"Poulet Korma",category:"Poulet en sauce",image:"",ingredients:[],options:[{label:"1 portion",price:425},{label:"2 portions",price:790}]},
+
+ {id:13,name:"Porc aux champignons",category:"Porc",image:"",ingredients:[],options:[{label:"1 portion",price:450},{label:"2 portions",price:850}]},
+ {id:14,name:"Porc à la moutarde et à l’érable",category:"Porc",image:"",ingredients:[],options:[{label:"1 portion",price:450},{label:"2 portions",price:850}]},
+ {id:15,name:"Porc Général Tao",category:"Porc",image:"",ingredients:[],options:[{label:"1 portion",price:450},{label:"2 portions",price:850}]},
+ {id:16,name:"Porc à la bière noire",category:"Porc",image:"",ingredients:[],options:[{label:"1 portion",price:450},{label:"2 portions",price:850}]},
+ {id:17,name:"Côtes Dr Pepper",category:"Porc",image:"",ingredients:[],options:[{label:"Par livre",price:820}]},
+ {id:18,name:"Porc effiloché",category:"Porc",image:"",ingredients:[],options:[{label:"500 g",price:750}]},
+
+ {id:19,name:"Poitrine de poulet César",category:"Poitrines de poulet",image:"",ingredients:[],options:[{label:"1 portion",price:400},{label:"2 portions",price:750}]},
+ {id:20,name:"Poitrine de poulet italienne",category:"Poitrines de poulet",image:"",ingredients:[],options:[{label:"1 portion",price:400},{label:"2 portions",price:750}]},
+ {id:21,name:"Poitrine de poulet mangue et miel",category:"Poitrines de poulet",image:"",ingredients:[],options:[{label:"1 portion",price:400},{label:"2 portions",price:750}]},
+ {id:22,name:"Poitrine de poulet orange et fines herbes",category:"Poitrines de poulet",image:"",ingredients:[],options:[{label:"1 portion",price:400},{label:"2 portions",price:750}]},
+
+ {id:23,name:"Dorade, safran et vanille",category:"Poissons et fruits de mer",image:"",ingredients:[],options:[{label:"1 portion",price:570},{label:"2 portions",price:1090}]},
+ {id:24,name:"Dorade, salsa de mangue et poivron rouge",category:"Poissons et fruits de mer",image:"",ingredients:[],options:[{label:"1 portion",price:570},{label:"2 portions",price:1090}]},
+ {id:25,name:"Crevettes Saganaki",category:"Poissons et fruits de mer",image:"",ingredients:[],options:[{label:"1 portion",price:630},{label:"2 portions",price:1195}]},
+ {id:26,name:"Lasagne aux fruits de mer",category:"Poissons et fruits de mer",image:"",ingredients:[],options:[{label:"Format unique",price:1145}]},
+ {id:27,name:"Saumon pavé, beurre, agrumes et fines herbes",category:"Poissons et fruits de mer",image:"",ingredients:[],options:[{label:"1 portion",price:765},{label:"2 portions",price:1470}]},
+
+ {id:28,name:"Curry de lentilles vertes au lait de coco",category:"Végétarien",image:"",ingredients:[],options:[{label:"1 portion",price:400},{label:"2 portions",price:750}]},
+ {id:29,name:"Chili végétarien",category:"Végétarien",image:"",ingredients:["Haricots rouges","Haricots noirs","Haricots blancs","Maïs","Tomates","Poivrons rouges et jaunes","Oignons rouges","Aubergine","Chou-fleur","Brocoli","Carottes","Ail","Coriandre","Basilic","Origan","Thym","Cumin","Jus et zeste de lime","Sauce légèrement épicée","Sel","Poivre"],options:[{label:"1 portion",price:400},{label:"2 portions",price:750}]},
+ {id:30,name:"Curry d’aubergine",category:"Végétarien",image:"",ingredients:[],options:[{label:"1 portion",price:400},{label:"2 portions",price:750}]},
+ {id:31,name:"Quiche végétarienne",category:"Végétarien",image:"",ingredients:[],options:[{label:"Format unique",price:710}]},
+ {id:54,name:"Boulettes végétariennes, sauce italienne",category:"Végétarien",image:"",ingredients:[],options:[{label:"1 portion",price:400},{label:"2 portions",price:750}]},
+
+ {id:32,name:"Quiche jambon et fromage",category:"Quiches",image:"",ingredients:[],options:[{label:"Format unique",price:735}]},
+ {id:51,name:"Quiche végétarienne",category:"Quiches",image:"",ingredients:[],options:[{label:"Format unique",price:655}]},
+ {id:52,name:"Quiche aubergine et fromage de chèvre",category:"Quiches",image:"",ingredients:[],options:[{label:"Format unique",price:735}]},
+
+ {id:33,name:"Lasagne",category:"Plats réconfortants",image:"",ingredients:[],options:[{label:"Format unique",price:820}]},
+ {id:34,name:"Pâté mexicain",category:"Plats réconfortants",image:"",ingredients:[],options:[{label:"Format unique",price:930}]},
+ {id:35,name:"Pâté chinois",category:"Plats réconfortants",image:"",ingredients:[],options:[{label:"Format unique",price:820}]},
+
+ {id:36,name:"Sauce bolognaise",category:"Sauces pour pâtes",image:"",ingredients:["Bœuf haché","Tomates en dés","Sauce tomate","Pâte de tomate","Ketchup","Vin rouge","Ail","Basilic","Origan","Persil","Thym","Épices","Sel","Poivre"],options:[{label:"½ litre",price:435},{label:"1 litre",price:820}]},
+ {id:37,name:"Sauce rosée",category:"Sauces pour pâtes",image:"",ingredients:["Purée de tomates","Crème","Ail","Basilic","Vin blanc","Sucre","Sel","Poivre"],options:[{label:"Format unique",price:655}]},
+ {id:38,name:"Sauce Alfredo",category:"Sauces pour pâtes",image:"",ingredients:[],options:[{label:"Format unique",price:490}]},
+ {id:39,name:"Sauce carbonara",category:"Sauces pour pâtes",image:"",ingredients:[],options:[{label:"Format unique",price:655}]},
+
+ {id:40,name:"Pommes de terre grelots rôties, ail et fines herbes",category:"Accompagnements",image:"",ingredients:[],options:[{label:"1 portion",price:190},{label:"2 portions",price:325}]},
+ {id:41,name:"Purée de pommes de terre",category:"Accompagnements",image:"",ingredients:[],options:[{label:"1 portion",price:190},{label:"2 portions",price:325}]},
+ {id:42,name:"Carottes laquées au miel épicé",category:"Accompagnements",image:"",ingredients:[],options:[{label:"1 portion",price:190},{label:"2 portions",price:325}]},
+ {id:43,name:"Riz basmati",category:"Accompagnements",image:"",ingredients:[],options:[{label:"1 portion",price:190},{label:"2 portions",price:325}]},
+ {id:44,name:"Légumes grillés",category:"Accompagnements",image:"",ingredients:[],options:[{label:"1 portion",price:190},{label:"2 portions",price:325}]},
+ {id:45,name:"Purée de carottes et courgettes",category:"Accompagnements",image:"",ingredients:[],options:[{label:"1 portion",price:190},{label:"2 portions",price:325}]}
+];
+
+let activeCategory="Tous";
+let searchValue="";
+
+let cart=JSON.parse(localStorage.getItem("suvidCart")||"[]");
+
+cart=cart.filter(function(item){
+ const product=products.find(function(p){return p.id===item.id;});
+ if(!product)return false;
+ const option=product.options.find(function(o){return o.label===item.option;});
+ if(!option)return false;
+ item.price=option.price;
+ return true;
+});
+localStorage.setItem("suvidCart",JSON.stringify(cart));
+
+const filtersElement=document.getElementById("filters");
+const menuGrid=document.getElementById("menuGrid");
+const searchInput=document.getElementById("searchInput");
+const cartContent=document.getElementById("cartContent");
+const cartCount=document.getElementById("cartCount");
+const subtotalElement=document.getElementById("subtotal");
+const totalPriceElement=document.getElementById("totalPrice");
+const orderForm=document.getElementById("orderForm");
+const formStatus=document.getElementById("formStatus");
+const submitButton=document.getElementById("submitButton");
+const toast=document.getElementById("toast");
+const openCartButton=document.getElementById("openCartButton");
+const cityElement=document.getElementById("city");
+const deliveryDayElement=document.getElementById("deliveryDay");
+const cityNotice=document.getElementById("cityNotice");
+
+function formatPrice(value){
+ return new Intl.NumberFormat("fr-FR").format(value)+" "+CONFIG.currency;
+}
+
+function saveCart(){
+ localStorage.setItem("suvidCart",JSON.stringify(cart));
+}
+
+function escapeHtml(value){
+ return String(value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+function getPhotoPlaceholder(){
+ return `<div class="photo-placeholder"><span>📷</span><small>Photo bientôt disponible</small></div>`;
+}
+
+function getCategories(){
+ return ["Tous",...new Set(products.map(function(p){return p.category;}))];
+}
+
+function renderFilters(){
+ filtersElement.innerHTML=getCategories().map(function(category){
+  return `<button type="button" class="filter-button ${category===activeCategory?"active":""}" data-category="${escapeHtml(category)}">${escapeHtml(category)}</button>`;
+ }).join("");
+
+ document.querySelectorAll(".filter-button").forEach(function(button){
+  button.addEventListener("click",function(){
+   activeCategory=button.dataset.category;
+   renderFilters();
+   renderProducts();
+  });
+ });
+}
+
+function getVisibleProducts(){
+ return products.filter(function(product){
+  const categoryMatches=activeCategory==="Tous"||product.category===activeCategory;
+  const searchableText=[product.name,product.category,product.ingredients.join(" ")].join(" ").toLowerCase();
+  return categoryMatches&&searchableText.includes(searchValue.toLowerCase());
+ });
+}
+
+function getDisplayedPrice(product){
+ const prices=product.options.map(function(option){return option.price;});
+ const min=Math.min.apply(null,prices);
+ const max=Math.max.apply(null,prices);
+ if(min===max)return formatPrice(min);
+ return formatPrice(min)+" à "+formatPrice(max);
+}
+
+function getIngredientsHtml(product){
+ if(!product.ingredients||product.ingredients.length===0)return `<p>Les ingrédients seront ajoutés prochainement.</p>`;
+ return `<ul>${product.ingredients.map(function(ingredient){return `<li>${escapeHtml(ingredient)}</li>`;}).join("")}</ul>`;
+}
+
+function renderProducts(){
+ const visibleProducts=getVisibleProducts();
+
+ if(visibleProducts.length===0){
+  menuGrid.innerHTML=`<div class="panel">Aucun plat ne correspond à votre recherche.</div>`;
+  return;
+ }
+
+ menuGrid.innerHTML=visibleProducts.map(function(product){
+  const optionsHtml=product.options.map(function(option,index){
+   return `<option value="${index}">${escapeHtml(option.label)} — ${formatPrice(option.price)}</option>`;
+  }).join("");
+
+  const photoHtml=product.image?`<img class="product-photo" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}">`:getPhotoPlaceholder();
+
+  return `
+   <article class="meal-card">
+    <div class="meal-image">${photoHtml}</div>
+    <div class="meal-content">
+     <div class="meal-header">
+      <h3 class="meal-name">${escapeHtml(product.name)}</h3>
+      <div class="meal-price">${getDisplayedPrice(product)}</div>
+     </div>
+     <p class="meal-category">${escapeHtml(product.category)}</p>
+     <details class="ingredients-box">
+      <summary>Voir les ingrédients</summary>
+      <div class="ingredients-content">${getIngredientsHtml(product)}</div>
+     </details>
+     <div class="field">
+      <label for="option-${product.id}">Choisir le format</label>
+      <select id="option-${product.id}">${optionsHtml}</select>
+     </div>
+     <button class="add-button" type="button" data-add-product="${product.id}">Ajouter au panier</button>
+    </div>
+   </article>`;
+ }).join("");
+
+ document.querySelectorAll("[data-add-product]").forEach(function(button){
+  button.addEventListener("click",function(){
+   addToCart(Number(button.dataset.addProduct));
+  });
+ });
+
+ document.querySelectorAll(".product-photo").forEach(function(image){
+  image.addEventListener("error",function(){
+   image.parentElement.innerHTML=getPhotoPlaceholder();
+  });
+ });
+}
+
+function addToCart(productId){
+ const product=products.find(function(item){return item.id===productId;});
+ if(!product)return;
+
+ const optionElement=document.getElementById("option-"+productId);
+ const optionIndex=Number(optionElement.value);
+ const selectedOption=product.options[optionIndex];
+ if(!selectedOption)return;
+
+ const cartKey=product.id+"-"+optionIndex;
+ const existingItem=cart.find(function(item){return item.key===cartKey;});
+
+ if(existingItem){
+  existingItem.quantity+=1;
+ }else{
+  cart.push({
+   key:cartKey,
+   id:product.id,
+   name:product.name,
+   option:selectedOption.label,
+   price:selectedOption.price,
+   quantity:1
+  });
+ }
+
+ saveCart();
+ renderCart();
+ showToast(product.name+" ajouté au panier");
+}
+
+function changeQuantity(cartKey,amount){
+ const item=cart.find(function(product){return product.key===cartKey;});
+ if(!item)return;
+
+ item.quantity+=amount;
+
+ if(item.quantity<=0){
+  cart=cart.filter(function(product){return product.key!==cartKey;});
+ }
+
+ saveCart();
+ renderCart();
+}
+
+function removeFromCart(cartKey){
+ cart=cart.filter(function(product){return product.key!==cartKey;});
+ saveCart();
+ renderCart();
+}
+
+function getSubtotal(){
+ return cart.reduce(function(total,item){
+  return total+item.price*item.quantity;
+ },0);
+}
+
+function getTotal(){
+ return getSubtotal();
+}
+
+function renderCart(){
+ const totalQuantity=cart.reduce(function(total,item){
+  return total+item.quantity;
+ },0);
+
+ cartCount.textContent=totalQuantity;
+
+ if(cart.length===0){
+  cartContent.innerHTML=`<div class="empty-cart">Votre panier est vide. Ajoutez un plat pour commencer.</div>`;
+ }else{
+  cartContent.innerHTML=`<div class="cart-items">${cart.map(function(item){
+   return `
+    <div class="cart-item">
+     <div>
+      <div class="cart-item-name">${escapeHtml(item.name)}</div>
+      <div class="cart-item-price">${escapeHtml(item.option)} — ${formatPrice(item.price)}</div>
+      <div class="quantity-control">
+       <button type="button" data-decrease="${escapeHtml(item.key)}">−</button>
+       <strong>${item.quantity}</strong>
+       <button type="button" data-increase="${escapeHtml(item.key)}">+</button>
+      </div>
+      <button class="remove-button" type="button" data-remove="${escapeHtml(item.key)}">Supprimer</button>
+     </div>
+     <strong>${formatPrice(item.price*item.quantity)}</strong>
+    </div>`;
+  }).join("")}</div>`;
+ }
+
+ document.querySelectorAll("[data-decrease]").forEach(function(button){
+  button.addEventListener("click",function(){
+   changeQuantity(button.dataset.decrease,-1);
+  });
+ });
+
+ document.querySelectorAll("[data-increase]").forEach(function(button){
+  button.addEventListener("click",function(){
+   changeQuantity(button.dataset.increase,1);
+  });
+ });
+
+ document.querySelectorAll("[data-remove]").forEach(function(button){
+  button.addEventListener("click",function(){
+   removeFromCart(button.dataset.remove);
+  });
+ });
+
+ subtotalElement.textContent=formatPrice(getSubtotal());
+ totalPriceElement.textContent=formatPrice(getTotal());
+}
+
+function updateCityAvailability(){
+ const city=cityElement.value;
+ cityNotice.hidden=true;
+ cityNotice.className="city-notice";
+
+ if(city==="Las Terrenas"){
+  deliveryDayElement.disabled=false;
+  deliveryDayElement.required=true;
+  deliveryDayElement.innerHTML=`<option value="">Choisir un jour</option><option value="Mardi">Mardi</option><option value="Samedi">Samedi</option>`;
+  submitButton.disabled=false;
+  submitButton.textContent="Confirmer ma commande";
+  return;
+ }
+
+ if(city==="Samaná"||city==="Las Galeras"){
+  deliveryDayElement.disabled=true;
+  deliveryDayElement.required=false;
+  deliveryDayElement.innerHTML=`<option value="">Bientôt disponible</option>`;
+
+  cityNotice.hidden=false;
+  cityNotice.className="city-notice pending";
+  cityNotice.textContent="Les livraisons dans cette ville sont actuellement en cours de préparation.";
+
+  submitButton.disabled=true;
+  submitButton.textContent="Zone bientôt disponible";
+  return;
+ }
+
+ deliveryDayElement.disabled=true;
+ deliveryDayElement.required=true;
+ deliveryDayElement.innerHTML=`<option value="">Choisissez d’abord une ville</option>`;
+ submitButton.disabled=false;
+ submitButton.textContent="Confirmer ma commande";
+}
+
+function scrollToOrder(){
+ document.getElementById("commande").scrollIntoView({behavior:"smooth"});
+}
+
+function showToast(message){
+ toast.textContent=message;
+ toast.classList.add("show");
+ clearTimeout(showToast.timer);
+ showToast.timer=setTimeout(function(){
+  toast.classList.remove("show");
+ },2200);
+}
+
+function setStatus(type,message){
+ formStatus.className="status "+type;
+ formStatus.textContent=message;
+}
+
+function clearStatus(){
+ formStatus.className="status";
+ formStatus.textContent="";
+}
+
+function createOrderPayload(formData){
+ const selectedCity=String(formData.get("city")||"").trim();
+
+ return {
+  customer:{
+   name:String(formData.get("customerName")||"").trim(),
+   phone:String(formData.get("phone")||"").trim(),
+   city:selectedCity,
+   sector:selectedCity,
+   residence:String(formData.get("residence")||"").trim(),
+   addressDetails:String(formData.get("addressDetails")||"").trim(),
+   referredBy:String(formData.get("referredBy")||"").trim()
+  },
+  order:{
+   deliveryDay:String(formData.get("deliveryDay")||""),
+   payment:String(formData.get("payment")||""),
+   notes:String(formData.get("notes")||"").trim(),
+
+   items:cart.map(function(item){
+    return {
+     name:item.name,
+     option:item.option,
+     price:item.price,
+     quantity:item.quantity,
+     lineTotal:item.price*item.quantity
+    };
+   }),
+
+   subtotal:getSubtotal(),
+   deliveryFee:0,
+   total:getTotal(),
+   currency:CONFIG.currency
+  },
+  createdAt:new Date().toISOString()
+ };
+}
+
+async function sendOrder(payload){
+ if(CONFIG.demoMode===true){
+  console.log("Commande test :",payload);
+  return {ok:true,demo:true};
+ }
+
+ const response=await fetch(CONFIG.orderEndpoint,{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify(payload)
+ });
+
+ const result=await response.json().catch(function(){return {};});
+
+ if(response.ok===false||result.ok===false){
+  throw new Error(result.message||"La commande n’a pas pu être envoyée.");
+ }
+
+ return result;
+}
+
+orderForm.addEventListener("submit",async function(event){
+ event.preventDefault();
+ clearStatus();
+
+ if(cart.length===0){
+  setStatus("error","Ajoutez au moins un produit avant de commander.");
+  return;
+ }
+
+ if(cityElement.value!=="Las Terrenas"){
+  setStatus("error","Les commandes sont actuellement disponibles uniquement à Las Terrenas.");
+  return;
+ }
+
+ if(!orderForm.reportValidity())return;
+
+ const formData=new FormData(orderForm);
+ const payload=createOrderPayload(formData);
+
+ submitButton.disabled=true;
+ submitButton.textContent="Envoi en cours...";
+
+ try{
+  await sendOrder(payload);
+
+  setStatus("success","Votre commande a bien été envoyée. Notre équipe vous contactera pour la confirmation.");
+
+  cart=[];
+  saveCart();
+  renderCart();
+  orderForm.reset();
+  updateCityAvailability();
+
+ }catch(error){
+  console.error(error);
+  setStatus("error",error.message||"Une erreur est survenue. Veuillez réessayer.");
+
+ }finally{
+  if(cityElement.value===""||cityElement.value==="Las Terrenas"){
+   submitButton.disabled=false;
+   submitButton.textContent="Confirmer ma commande";
+  }
+ }
+});
+
+searchInput.addEventListener("input",function(){
+ searchValue=searchInput.value.trim();
+ renderProducts();
+});
+
+cityElement.addEventListener("change",updateCityAvailability);
+openCartButton.addEventListener("click",scrollToOrder);
+document.getElementById("year").textContent=new Date().getFullYear();
+
+renderFilters();
+renderProducts();
+renderCart();
+updateCityAvailability();
+</script>
+</body>
+</html>
